@@ -2,7 +2,7 @@
   <div class="col s12 m6">
     <div>
       <div class="page-subtitle">
-        <h4>Редактировать</h4>
+        <h4>{{"Edit" | loca}}</h4>
       </div>
 
       <form @submit.prevent="submitHandler">
@@ -10,7 +10,7 @@
           <select ref="select" v-model="current">
             <option v-for="c of categories" :key="c.id" :value="c.id">{{c.title}}</option>
           </select>
-          <label>Выберите категорию</label>
+          <label>{{"Selected_category" | local}}</label>
         </div>
 
         <div class="input-field">
@@ -20,11 +20,11 @@
             v-model="title"
             :class="{invalid: !$v.title.required}"
           />
-          <label for="name">Название</label>
+          <label for="name">{{"Title" | local}}</label>
           <span
             v-if="!$v.title.required"
             class="helper-text invalid">
-            Введите название
+            {{"Enter_title" | local}}
           </span>
         </div>
 
@@ -35,16 +35,16 @@
             v-model.number="limit"
             :class="{invalid: !$v.limit.minValue || !$v.limit.required}"
           />
-          <label for="limit">Лимит</label>
+          <label for="limit">{{"Limit" | local}}</label>
           <span
             v-if="!$v.limit.minValue || !$v.limit.required"
             class="helper-text invalid"
-          >Минимальная величина {{$v.limit.$params.minValue.min}}
+          >{{"Min_value" | local}} {{$v.limit.$params.minValue.min}}
           </span>
         </div>
 
         <button class="btn waves-effect waves-light" type="submit">
-          Обновить
+          {{"Update" | local}}
           <i class="material-icons right">send</i>
         </button>
       </form>

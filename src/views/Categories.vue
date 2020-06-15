@@ -3,7 +3,7 @@
     <div class="app-page">
       <div>
         <div class="page-title">
-          <h3>Категории</h3>
+          <h3>{{"Categories"}}</h3>
         </div>
         <section>
           <loader v-if="loading" />
@@ -11,7 +11,7 @@
             <CategoryCreate @created="addNewCategory" />
 
             <CategoryEdit v-if="categories.length" :categories="categories" :key="categories.lenth + updateCount" @updated="updateCategories"/>
-            <p v-else class="center">Категорий пока нет</p>
+            <p v-else class="center">{{"No_categories" | local}}</p>
           </div>
         </section>
       </div>
@@ -23,6 +23,11 @@ import CategoryCreate from '@/components/CategoryCreate'
 import CategoryEdit from '@/components/CategoryEdit'
 export default {
   name: 'categories',
+  metaInfo () {
+    return {
+      title: this.$title('Categories')
+    }
+  },
   data: () => ({
     categories: [],
     loading: true,

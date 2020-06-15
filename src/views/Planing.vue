@@ -2,7 +2,7 @@
   <div class="app-page">
     <div>
       <div class="page-title">
-        <h3>Планирование</h3>
+        <h3>{{"Planing" | local}}</h3>
         <h4>{{ this.info.bill | currency('RUB')}}</h4>
       </div>
 
@@ -11,13 +11,13 @@
       <p class="center" v-else-if="!categories.length">Категорий пока нет. <router-link to="/categories">Добавить новую категорию</router-link></p>
 
       <section v-else>
-        <div>
+        <div v-for="cat of categories" :key="cat.id">
           <p>
-            <strong>Девушка:</strong>
-            12 122 из 14 0000
+            <strong>{{cat.title}}:</strong>
+            {{cat.spend | currency}} из {{cat.limit | currency}}
           </p>
-          <div class="progress">
-            <div class="determinate green" style="width:40%"></div>
+          <div class="progress" v-tooltip="cat.tooltip"  data-position="top">
+            <div class="determinate" :class="[cat.progressColor]" :style="{width: cat.progressPercent + '%'}"></div>
           </div>
         </div>
       </section>
@@ -26,8 +26,15 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import currencyFilter from '@/filters/currency.filter'
+import localFilter from '@/filters/local.filter'
 export default {
   name: 'planing',
+  metaInfo () {
+    return {
+      title: this.$title('Planing')
+    }
+  },
   data: () => ({
     loading: true,
     categories: []
@@ -41,6 +48,25 @@ export default {
     this.categories = categories.map(cat => {
       const spend = records
         .filter(r => r.categoryId === cat.id)
+        .filter(r => r.type === 'outcome')
+        .reduce((total, record) => {
+          return total + parseInt(record.amount)
+        }, 0)
+      const percent = 100 * spend / cat.limit
+      const progressPercent = percent > 100 ? 100 : percent
+      const progressColor = percent < 60 ? 'green'
+        : percent < 100 ? 'yellow' : 'red'
+
+      const tooltipValue = cat.limit - spend
+      const tooltip = `${tooltipValue < 0 ? localFilter('Excess_by') : localFilter('Money_left')} ${currencyFilter(Math.abs(tooltipValue))}`
+
+      return {
+        ...cat,
+        progressPercent,
+        progressColor,
+        spend,
+        tooltip
+      }
     })
 
     this.loading = false

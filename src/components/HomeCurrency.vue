@@ -3,14 +3,14 @@
     <div class="card orange darken-3 bill-card">
       <div class="card-content white-text">
         <div class="card-header">
-          <span class="card-title">Курс валют</span>
+          <span class="card-title">{{'Exchange_rate' | local}}</span>
         </div>
         <table>
           <thead>
             <tr>
-              <th>Валюта</th>
-              <th>Курс</th>
-              <th>Дата</th>
+              <th>{{'Currency' | local}}</th>
+              <th>{{'Course' | local}}</th>
+              <th>{{'Date' | local}}</th>
             </tr>
           </thead>
 
@@ -18,7 +18,7 @@
             <tr v-for="cur of currencies" :key="cur">
               <td>{{cur}}</td>
               <td>{{rates[cur].toFixed(5)}}</td>
-              <td>{{date | date('date')}}</td>
+              <td>{{date}}</td>
             </tr>
           </tbody>
         </table>

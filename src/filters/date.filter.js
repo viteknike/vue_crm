@@ -1,17 +1,19 @@
 export default function dateFilter (value, format = 'date') {
-  const options = {}
+  var date
+  value = new Date(value)
 
   if (format.includes('date')) {
-    options.day = '2-digit'
-    options.month = 'long'
-    options.year = 'numeric'
+    const day = (value.getDate() < 10) ? '0' + value.getDate() : value.getDate()
+    const month = (value.getMonth() < 10) ? '0' + value.getMonth() : value.getMonth()
+    date = day + '-' + month + '-' + value.getFullYear()
   }
 
   if (format.includes('time')) {
-    options.hour = '2-digit'
-    options.minute = '2-digit'
-    options.second = '2-digit'
-  }
+    const hours = (value.getHours() < 10) ? '0' + value.getHours() : value.getHours()
+    const minutes = (value.getMinutes() < 10) ? '0' + value.getMinutes() : value.getMinutes()
+    const seconds = (value.getSeconds() < 10) ? '0' + value.getSeconds() : value.getSeconds()
 
-  return new Intl.DateTimeFormat('ru-RU', options).format(new Date(value))
+    date += ' ' + hours + ':' + minutes + ':' + seconds
+  }
+  return date
 }

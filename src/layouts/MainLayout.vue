@@ -4,7 +4,7 @@
     <div class="app-main-layout" v-else>
       <Navbar @click="isOpen = !isOpen" />
 
-      <Sidebar v-model="isOpen" />
+      <Sidebar v-model="isOpen" :key="locale" />
 
       <main class="app-content" :class="{full: !isOpen}">
         <div class="app-page">
@@ -13,7 +13,7 @@
       </main>
 
       <div class="fixed-action-btn">
-        <router-link class="btn-floating btn-large blue" to="/record">
+        <router-link class="btn-floating btn-large blue" to="/record"  data-position="left" v-tooltip="'Создать новую запись'">
           <i class="large material-icons">add</i>
         </router-link>
       </div>
@@ -23,6 +23,7 @@
 <script>
 import Navbar from '@/components/app/Navbar'
 import Sidebar from '@/components/app/Sidebar'
+import messages from '@/utils/messages'
 
 export default {
   name: 'main-layout',
@@ -40,6 +41,22 @@ export default {
   components: {
     Navbar,
     Sidebar
+  },
+  computed: {
+    error () {
+      return this.$store.getters.error
+    },
+    locale () {
+      return this.$store.getters.info.locale
+    }
+  },
+  watch: {
+    /* locale () {
+      console.log('Local changed')
+    }, */
+    error (fbError) {
+      this.$error(messages[fbError.code] || 'Что-то пошло не так')
+    }
   }
 }
 </script>

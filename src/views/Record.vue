@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="page-title">
-      <h3>Новая запись</h3>
+      <h3>{{"NewRecord" | local}}</h3>
     </div>
 
     <loader v-if="loading" />
@@ -18,43 +18,43 @@
             {{c.title}}
           </option>
         </select>
-        <label>Выберите категорию</label>
+        <label>{{"Selected_category" | local}}</label>
       </div>
 
       <p>
         <label>
           <input class="with-gap" name="type" type="radio" value="income" v-model="type" />
-          <span>Доход</span>
+          <span>{{"Income" | local}}</span>
         </label>
       </p>
 
       <p>
         <label>
           <input class="with-gap" name="type" type="radio" value="outcome" v-model="type" />
-          <span>Расход</span>
+          <span>{{"Outcome" | local}}</span>
         </label>
       </p>
 
       <div class="input-field">
         <input id="amount" type="number" v-model.number="amount" :class="{invalid: !$v.amount.required || !$v.amount.minValue}" />
-        <label for="amount">Сумма</label>
+        <label for="amount">{{"Amount" | local}}</label>
         <span v-if="!$v.amount.required || !$v.amount.minValue" class="helper-text invalid" >
-          Минимальная величина {{$v.amount.$params.minValue.min}}
+          {{"Min_value" | local}} {{$v.amount.$params.minValue.min}}
         </span>
       </div>
 
       <div class="input-field">
         <input id="description" type="text" v-model="description" :class="{invalid: !$v.description.required}" />
-        <label for="description">Описание</label>
+        <label for="description">{{"Description" | local}}</label>
         <span
             v-if="!$v.description.required"
             class="helper-text invalid">
-            Введите название
+            {{"Enter_title" | local}}
           </span>
       </div>
 
       <button class="btn waves-effect waves-light" type="submit">
-        Создать
+        {{"Create" | local}}
         <i class="material-icons right">send</i>
       </button>
     </form>
@@ -68,6 +68,11 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'record',
+  metaInfo () {
+    return {
+      title: this.$title('NewRecord')
+    }
+  },
   data: () => ({
     loading: true,
     select: null,
@@ -100,7 +105,7 @@ export default {
   computed: {
     ...mapGetters(['info']),
     canCreateRecord () {
-      if (this.tupe === 'income') {
+      if (this.type === 'income') {
         return true
       }
 
@@ -123,9 +128,7 @@ export default {
             type: this.type,
             date: new Date().toJSON()
           })
-          const bill = this.type === 'income'
-            ? this.info.bill + this.amount
-            : this.info.bill - this.amount
+          const bill = this.type === 'income' ? this.info.bill + this.amount : this.info.bill - this.amount
 
           await this.$store.dispatch('updateInfo', { bill })
           this.$message('Запись успешно создана')

@@ -14,15 +14,16 @@
   </ul>
 </template>
 <script>
+import localFilter from '@/filters/local.filter'
 export default {
   props: ['value'],
   data: () => ({
     links: [
-      { title: 'Счет', url: '/', exact: true },
-      { title: 'История', url: '/history' },
-      { title: 'Планирование', url: '/planing' },
-      { title: 'Новая запись', url: '/record' },
-      { title: 'Категории', url: '/categories' }
+      { title: localFilter('Bill'), url: '/', exact: true },
+      { title: localFilter('History'), url: '/history' },
+      { title: localFilter('Planing'), url: '/planing' },
+      { title: localFilter('NewRecord'), url: '/record' },
+      { title: localFilter('Categories'), url: '/categories' }
     ]
 
   })
